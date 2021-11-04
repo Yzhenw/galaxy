@@ -1,20 +1,27 @@
 <script setup>
-import { defineProps, defineEmits } from "vue";
-defineProps({
+import { ref } from "vue";
+import "../plugins/input/normalize.css";
+import "../plugins/input/set.css";
+
+const props = defineProps({
   label: { type: String, required: true },
   type: { type: String, default: "text" },
   modelValue: { type: String, required: true },
 });
 defineEmits(["update:modelValue"]);
+
+const filled = ref(!!props.modelValue);
 </script>
 
 <template>
-  <section class="input input--nao">
+  <section class="input input--nao" :class="{ 'input--filled': filled }">
     <input
       class="input__field input__field--nao"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       :type="type"
+      @blur="filled = modelValue.trim() !== ''"
+      @focus="filled = true"
     />
     <label class="input__label input__label--nao" for="input-3">
       <span class="input__label-content input__label-content--nao">
@@ -34,12 +41,3 @@ defineEmits(["update:modelValue"]);
     </svg>
   </section>
 </template>
-
-<style scoped>
-.graphic--nao {
-  stroke: white;
-}
-.input__label-content--nao {
-  color: white;
-}
-</style>

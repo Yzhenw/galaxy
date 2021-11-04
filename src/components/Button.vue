@@ -1,6 +1,11 @@
 <script setup>
-import Particles from "../plugins/particles";
-import { onMounted, ref } from "vue";
+import "../plugins/button/base.css";
+import "../plugins/button/particles.css";
+import Particles from "../plugins/button/particles";
+
+import { onMounted } from "vue";
+
+const emit = defineEmits(["click"]);
 
 let particles = null;
 onMounted(() => {
@@ -10,7 +15,9 @@ onMounted(() => {
     size: 6,
     particlesAmountCoefficient: 4,
     oscillationCoefficient: 2,
-    color: "#ffffff",
+    color: () => (Math.random() < 0.5 ? "#f3f3f3" : "#3c2e9e"),
+    complete: () => emit("click"),
+    duration: 600,
   });
 });
 
@@ -21,14 +28,8 @@ const Click = () => {
 
 <template>
   <div class="flex theme-2">
-    <button class="particles-button" @click="Click"><slot /></button>
+    <button class="particles-button" @click="Click">
+      <slot />
+    </button>
   </div>
 </template>
-
-<style scoped>
-.flex {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>
