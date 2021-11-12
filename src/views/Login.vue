@@ -9,13 +9,14 @@ const router = useRouter();
 const nick = ref("");
 const password = ref("");
 const Click = () => {
+  // 登录api操作
   router.push("/");
 };
 </script>
 
 <template>
   <main class="flex direction">
-    <img width="270" src="../assets/title.png" />
+    <img width="270" src="../assets/image/title.png" />
     <section>
       <Input label="昵称" v-model="nick" />
       <Input label="密码" type="password" v-model="password" />

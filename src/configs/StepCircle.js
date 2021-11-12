@@ -1,7 +1,7 @@
 import Particle from "./Particle";
 
 export default class StepCircle {
-  static RadiusReduce = 0.8;
+  static RadiusReduce = 1;
   static Color = "white";
 
   constructor(radius, ctx) {

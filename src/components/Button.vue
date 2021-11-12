@@ -1,7 +1,6 @@
 <script setup>
-import "../plugins/button/base.css";
-import "../plugins/button/particles.css";
-import Particles from "../plugins/button/particles";
+import "../assets/css/particles.css";
+import Particles from "../plugins/particles";
 
 import { onMounted } from "vue";
 

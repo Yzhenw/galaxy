@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import "../plugins/input/normalize.css";
-import "../plugins/input/set.css";
+import "../assets/css/input.css";
 
 const props = defineProps({
   label: { type: String, required: true },

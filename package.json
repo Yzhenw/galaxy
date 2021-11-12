@@ -2,7 +2,7 @@
   "name": "one-two-step",
   "version": "0.0.0",
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
     "build": "vite build",
     "serve": "vite preview"
   },

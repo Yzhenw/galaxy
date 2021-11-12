@@ -8,7 +8,7 @@
 
 <style>
 #app {
-  background: url("./assets/background.jpg") top center/100vw 100vh fixed
+  background: url("./assets/image/background.jpg") top center/100vw 100vh fixed
     no-repeat;
 }
 #app,

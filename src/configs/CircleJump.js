@@ -12,8 +12,7 @@ export default class CircleJump {
     this.player = new PlayerCircle(this.circles, ctx);
     this.timer = null;
     this.speed = {
-      CirclesIncrease: 60,
-      RadiusReduce: 0.8,
+      CirclesIncrease: 50,
       CanvasRotate: Math.PI / 180,
     };
   }
