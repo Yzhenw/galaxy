@@ -19,7 +19,7 @@ onMounted(() => {
   anime({
     targets: ".card",
     translateX: (el, i) => [100, 250, 60, 190][i],
-    translateY: (el, i) => 90 + 90 * i,
+    translateY: (el, i) => 120 + 90 * i,
     scale: (el, i, l) => l - i + 0.6,
     duration: () => anime.random(1200, 1800),
     delay: () => anime.random(200, 600),
