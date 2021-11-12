@@ -1,6 +1,6 @@
 # Galaxy
 
-考验反应力的 H5 小游戏 ~~（名字是瞎取的）~~。
+A H5 game to test reaction ~~（The name was taken in vain）~~。
 
 ## Project setup
 
@@ -34,16 +34,18 @@ yarn serve
 
 ### Animate style
 
+[Tutorial](https://www.it666.com/my/course/27) The 19, 20 and 21 Chapter
+
 [anime.js](https://cn.vitejs.dev/guide/static-deploy.html#testing-the-app-locally)
 
 ### Component style
 
-[Codrops](https://github.com/codrops) 中有非常多花样的样式效果
+[Codrops](https://github.com/codrops) has made a lot of pattern effects
 
 - [Text Input Effects](https://github.com/codrops/TextInputEffects)
 - [Particle Effects for Buttons](https://github.com/codrops/ParticleEffectsButtons)
 
-# Vue 3 + Vite
+## Vue 3 + Vite
 
 [Vite Preview](https://cn.vitejs.dev/guide/static-deploy.html#testing-the-app-locally)
 
