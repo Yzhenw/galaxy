@@ -3,13 +3,14 @@ import Button from "../components/Button.vue";
 import Input from "../components/Input.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
+import { LoginOrSignup } from "../plugins/axios";
 const router = useRouter();
 
 const nick = ref("");
 const password = ref("");
+
 const Click = () => {
-  // 登录api操作
+  LoginOrSignup(nick.value, password.value);
   router.push("/");
 };
 </script>

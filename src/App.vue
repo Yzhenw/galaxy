@@ -1,3 +1,8 @@
+<script setup>
+let user = JSON.parse(localStorage.getItem("user"));
+// if (user) dispatch("LoginOrSignup", user);
+</script>
+
 <template>
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in">
@@ -7,12 +12,10 @@
 </template>
 
 <style>
-#app {
-  background: url("./assets/image/background.jpg") top center/100vw 100vh fixed
-    no-repeat;
-}
 #app,
-main {
+main,
+body,
+html {
   min-height: 100vh;
   overflow: hidden;
   width: 100vw;
