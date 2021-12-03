@@ -19,6 +19,7 @@ html {
   min-height: 100vh;
   overflow: hidden;
   width: 100vw;
+  background-color: #efefef;
 }
 canvas {
   margin: 0 auto;

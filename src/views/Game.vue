@@ -1,17 +1,15 @@
 <script setup>
 import { onMounted } from "vue";
 import BlockPair from "../configs/BlockPair";
-// import CircleJump from "../configs/CircleJump";
 const W = document.documentElement.clientWidth;
 const H = document.documentElement.clientHeight;
 
+let blockpair = new BlockPair(W, H);
+
 onMounted(() => {
   const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-
-  // const cj = new CircleJump(ctx, WIDTH, HEIGHT);
-  const cj = new BlockPair(ctx, W, H);
-  cj.render();
+  blockpair.ctx = canvas.getContext("2d");
+  blockpair.resize(W, H).render();
 
   window.addEventListener(
     "resize",
@@ -24,12 +22,12 @@ onMounted(() => {
     }) => {
       canvas.width = clientWidth;
       canvas.height = clientHeight;
-      cj.resize(clientWidth, clientHeight).render();
+      blockpair.resize(clientWidth, clientHeight).render();
     }
   );
 });
 </script>
 
 <template>
-  <canvas id="canvas" :width="W" :height="H" />
+  <canvas id="canvas" @click="blockpair.Click" :width="W" :height="H" />
 </template>

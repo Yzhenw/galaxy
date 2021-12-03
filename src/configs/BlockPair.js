@@ -1,56 +1,119 @@
 import { shuffle } from "../plugins/shuffle";
 
-const Colors = Object.freeze(["red", "green", "yellow", "blue"]);
-const B = Object.freeze({ R: 4, C: 6, L: 72 });
+const Colors = Object.freeze(["#F44336", "#4CAF50", "#FFEB3B", "#2196F3"]);
+const Basics = Object.freeze({ R: 4, C: 6, L: 72 });
 
 export default class BlockPair {
-  constructor(ctx, W, H) {
-    this.ctx = ctx;
+  constructor(W, H) {
     this.W = W;
     this.H = H;
-
-    ctx.save();
-    this.resize(W, H);
+    this.save = null;
+    this.blocks = [];
   }
 
   render = () => {
-    const { ctx, L, X, Y } = this;
-    const result = this.L3Block();
+    this.blocks = this.L3Block();
+    const { ctx, L, blocks } = this;
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 2;
+    console.log(blocks);
+    for (const b of blocks) {
+      ctx.fillStyle = b.c;
+      ctx.fillRect(b.x, b.y, L, L);
+      ctx.strokeRect(b.x, b.y, L, L);
+    }
     return this;
   };
 
   resize = (W = this.W, H = this.H) => {
     if (W > H) {
-      this.X = B.C;
-      this.Y = B.R;
+      this.X = Basics.C;
+      this.Y = Basics.R;
     } else {
-      this.X = B.R;
-      this.Y = B.C;
+      this.X = Basics.R;
+      this.Y = Basics.C;
     }
-    this.L = Math.floor(Math.min(B.L, W / this.X, H / this.Y));
-    const OX = (W - this.X * this.L) / 2;
-    const OY = (H - this.Y * this.L) / 2;
-    this.ctx.restore();
-    this.ctx.translate(OX, OY);
+    this.L = Math.floor(Math.min(Basics.L, W / this.X, H / this.Y));
+    this.OX = (W - this.X * this.L) / 2;
+    this.OY = (H - this.Y * this.L) / 2;
+    this.ctx.translate(this.OX, this.OY);
     return this;
   };
 
   L3Block = () => {
-    const colors = shuffle(Colors);
-    const l = colors.length;
+    const { L } = this;
     const result = [];
     for (let i = 0; i < 4; i++) {
-      const position = Math.floor(Math.random() * 2);
+      const p = Math.floor(Math.random() * 2);
+      const X0 = (i % 2) * 3;
+      const Y0 = Math.floor(i / 2) * 2;
       for (let j = 0; j < 2; j++) {
-        const select = [
-          colors[Math.floor(Math.random() * 4)],
-          colors[Math.floor(Math.random() * 4)],
-        ];
-        const repeat = Math.floor(Math.random() * 2);
-        const direction = Math.floor(Math.random() * 2);
-        result.push({});
+        const colors = shuffle(Colors);
+        const s = colors.splice(Math.floor(Math.random() * colors.length), 1);
+        s.push(colors[Math.floor(Math.random() * colors.length)]);
+        const r = Math.floor(Math.random() * s.length);
+        const d = Math.floor(Math.random() * 2);
+        result.push(
+          { x: Y0 * L, y: (X0 + j * 2) * L, c: s[(p & d) ^ r] },
+          { x: (Y0 + 1) * L, y: (X0 + j * 2) * L, c: s[(p | d) ^ r ^ 1] },
+          { x: (Y0 + (p ^ j)) * L, y: (X0 + 1) * L, c: s[(p | d) ^ r] }
+        );
       }
     }
     return result;
+  };
+
+  clear = (b, save) => {
+    const { ctx, L, blocks } = this;
+    const minX = Math.min(b.x, save.x);
+    const maxX = Math.max(b.x, save.x);
+    const minY = Math.min(b.y, save.y);
+    const maxY = Math.max(b.y, save.y);
+    let flag = true;
+    const inners = [];
+    for (let i = 0; i < blocks.length; i++) {
+      const inner = blocks[i];
+      inners.push(i);
+      if (
+        inner.c !== save.c &&
+        inner.x >= minX &&
+        inner.x <= maxX &&
+        inner.y >= minY &&
+        inner.y <= maxY
+      ) {
+        flag = false;
+        break;
+      }
+    }
+    if (flag) {
+      for (const index of inners) blocks.splice(index, 1);
+      ctx.clearRect(minX, minY, maxX + L - minX, maxY + L - minY);
+    }
+  };
+
+  Click = ({ clientX, clientY }) => {
+    const { ctx, L, blocks, OX, OY, save } = this;
+    clientX -= OX;
+    clientY -= OY;
+    for (const b of blocks) {
+      if (
+        clientX >= b.x &&
+        clientX <= b.x + L &&
+        clientY >= b.y &&
+        clientY <= b.y + L
+      ) {
+        if (!save) {
+          ctx.strokeStyle = "#00BCD4";
+          ctx.strokeRect(b.x, b.y, L, L);
+          this.save = b;
+        } else if (save !== b) {
+          ctx.strokeStyle = "#333";
+          ctx.strokeRect(save.x, save.y, L, L);
+          this.save = null;
+          if (save.c === b.c) this.clear(b, save);
+        }
+        break;
+      }
+    }
   };
 }
