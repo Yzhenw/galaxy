@@ -44,19 +44,34 @@ export default class BlockPair {
     const { L } = this;
     const result = [];
     for (let i = 0; i < 4; i++) {
-      const p = Math.floor(Math.random() * 2);
-      const X0 = (i % 2) * 3;
-      const Y0 = Math.floor(i / 2) * 2;
+      const position = Math.floor(Math.random() * 2);
+      const X0 = (i % 2) * 2;
+      const Y0 = Math.floor(i / 2) * 3;
       for (let j = 0; j < 2; j++) {
         const colors = shuffle(Colors);
-        const s = colors.splice(Math.floor(Math.random() * colors.length), 1);
-        s.push(colors[Math.floor(Math.random() * colors.length)]);
-        const r = Math.floor(Math.random() * s.length);
-        const d = Math.floor(Math.random() * 2);
+        const select = colors.splice(
+          Math.floor(Math.random() * colors.length),
+          1
+        );
+        select.push(colors[Math.floor(Math.random() * colors.length)]);
+        const repeat = Math.floor(Math.random() * select.length);
+        const direction = Math.floor(Math.random() * 2);
         result.push(
-          { x: Y0 * L, y: (X0 + j * 2) * L, c: s[(p & d) ^ r] },
-          { x: (Y0 + 1) * L, y: (X0 + j * 2) * L, c: s[(p | d) ^ r ^ 1] },
-          { x: (Y0 + (p ^ j)) * L, y: (X0 + 1) * L, c: s[(p | d) ^ r] }
+          {
+            x: X0 * L,
+            y: (Y0 + j * 2) * L,
+            c: select[(position & direction) ^ repeat],
+          },
+          {
+            x: (X0 + 1) * L,
+            y: (Y0 + j * 2) * L,
+            c: select[(position | direction) ^ repeat ^ 1],
+          },
+          {
+            x: (X0 + (position ^ j)) * L,
+            y: (Y0 + 1) * L,
+            c: select[(position | direction) ^ repeat],
+          }
         );
       }
     }
