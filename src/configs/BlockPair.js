@@ -57,6 +57,7 @@ export default class BlockPair {
         const repeat = Math.floor(Math.random() * select.length);
         const direction = Math.floor(Math.random() * 2);
         result.push(
+          /* 
           {
             x: X0 * L,
             y: (Y0 + j * 2) * L,
@@ -71,6 +72,22 @@ export default class BlockPair {
             x: (X0 + (position ^ j)) * L,
             y: (Y0 + 1) * L,
             c: select[(position | direction) ^ repeat],
+          }
+          */
+          {
+            x: X0 * L,
+            y: (Y0 + j * 2) * L,
+            c: select[position ^ j ? repeat ^ 1 ^ direction : repeat],
+          },
+          {
+            x: (X0 + 1) * L,
+            y: (Y0 + j * 2) * L,
+            c: select[position ^ j ? repeat : repeat ^ 1 ^ direction],
+          },
+          {
+            x: (X0 + (position ^ j)) * L,
+            y: (Y0 + 1) * L,
+            c: select[repeat ^ direction],
           }
         );
       }
