@@ -1,6 +1,8 @@
 import { shuffle } from "../plugins/shuffle";
 
 const Colors = Object.freeze(["#F44336", "#4CAF50", "#FFEB3B", "#2196F3"]);
+let ColorsIndex = [0, 1, 2, 3]; //对应Colors每一种颜色的四个下标
+const ColorsNumber = [6, 6, 6, 6]; //对应Colors每一种颜色的数量
 const Basics = Object.freeze({ R: 4, C: 6, L: 72 });
 
 export default class BlockPair {
@@ -43,18 +45,44 @@ export default class BlockPair {
   L3Block = () => {
     const { L } = this;
     const result = [];
+    let coReIndex;
     for (let i = 0; i < 4; i++) {
       const position = Math.floor(Math.random() * 2);
       const X0 = (i % 2) * 2;
       const Y0 = Math.floor(i / 2) * 3;
       for (let j = 0; j < 2; j++) {
-        const colors = shuffle(Colors);
-        const select = colors.splice(
-          Math.floor(Math.random() * colors.length),
+        ColorsIndex = ColorsIndex.filter((num) => {
+          return ColorsNumber[num] > 0;
+        });
+        coReIndex = ColorsIndex.filter((num) => {
+          return ColorsNumber[num] > 1;
+        });
+        console.log(ColorsIndex);
+        console.log(coReIndex);
+        console.log(ColorsNumber);
+        console.log("--------------------");
+        let colorsIndex = shuffle(ColorsIndex);
+        // console.log(colorsIndex);
+        //重复颜色的下标
+        const repeatIndex = coReIndex.splice(
+          Math.floor(Math.random() * colorsIndex.length),
           1
-        );
-        select.push(colors[Math.floor(Math.random() * colors.length)]);
-        const repeat = Math.floor(Math.random() * select.length);
+        )[0];
+        coReIndex = [];
+        // console.log(repeatIndex);
+        colorsIndex.splice(colorsIndex.indexOf(repeatIndex), 1);
+        //不重复颜色的下标
+        const unRepeatIndex = colorsIndex.splice(
+          Math.floor(Math.random() * colorsIndex.length),
+          1
+        )[0];
+        // console.log(unRepeatIndex);
+        //将选出的颜色按重复、不重复的顺序写成数组
+        const select = [Colors[repeatIndex], Colors[unRepeatIndex]];
+        //减去使用过的颜色
+        ColorsNumber[repeatIndex] -= 2;
+        ColorsNumber[unRepeatIndex] -= 1;
+        // console.log(ColorsNumber);
         const direction = Math.floor(Math.random() * 2);
         result.push(
           /* 
@@ -77,17 +105,17 @@ export default class BlockPair {
           {
             x: X0 * L,
             y: (Y0 + j * 2) * L,
-            c: select[position ^ j ? repeat ^ 1 ^ direction : repeat],
+            c: select[position ^ j ? 1 ^ direction : 0],
           },
           {
             x: (X0 + 1) * L,
             y: (Y0 + j * 2) * L,
-            c: select[position ^ j ? repeat : repeat ^ 1 ^ direction],
+            c: select[position ^ j ? 0 : 1 ^ direction],
           },
           {
             x: (X0 + (position ^ j)) * L,
             y: (Y0 + 1) * L,
-            c: select[repeat ^ direction],
+            c: select[0 ^ direction],
           }
         );
       }
